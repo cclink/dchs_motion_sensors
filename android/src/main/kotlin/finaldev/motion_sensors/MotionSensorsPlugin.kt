@@ -168,12 +168,15 @@ class StreamHandlerImpl(private val sensorManager: SensorManager, private val se
   }
 }
 
-class RotationVectorStreamHandler(private val sensorManager: SensorManager, sensorType: Int, private var interval: Int = SensorManager.SENSOR_DELAY_NORMAL) :
+class RotationVectorStreamHandler(private val sensorManager: SensorManager, private val sensorType: Int, private var interval: Int = SensorManager.SENSOR_DELAY_NORMAL) :
         EventChannel.StreamHandler, SensorEventListener {
-  private val sensor = sensorManager.getDefaultSensor(sensorType)
+  private var sensor: Sensor? = null
   private var eventSink: EventChannel.EventSink? = null
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+    if (sensor == null) {
+      sensor = sensorManager.getDefaultSensor(sensorType)
+    }
     if (sensor != null) {
       eventSink = events
       sensorManager.registerListener(this, sensor, interval)
@@ -209,13 +212,16 @@ class RotationVectorStreamHandler(private val sensorManager: SensorManager, sens
   }
 }
 
-class ScreenOrientationStreamHandler(private val context: Context, private val sensorManager: SensorManager, sensorType: Int, private var interval: Int = SensorManager.SENSOR_DELAY_NORMAL) :
+class ScreenOrientationStreamHandler(private val context: Context, private val sensorManager: SensorManager,private val sensorType: Int, private var interval: Int = SensorManager.SENSOR_DELAY_NORMAL) :
         EventChannel.StreamHandler, SensorEventListener {
-  private val sensor = sensorManager.getDefaultSensor(sensorType)
+  private var sensor: Sensor? = null
   private var eventSink: EventChannel.EventSink? = null
   private var lastRotation: Double = -1.0
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+    if (sensor == null) {
+      sensor = sensorManager.getDefaultSensor(sensorType)
+    }
     eventSink = events
     sensorManager.registerListener(this, sensor, interval)
   }
