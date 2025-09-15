@@ -25,3 +25,14 @@ doc/api/
 
 .flutter-plugins
 .flutter-plugins-dependencies
+
+.DS_Store
+.dart_tool/
+
+.packages
+.pub/
+
+.idea/
+.vagrant/
+.sconsign.dblite
+.svn/
